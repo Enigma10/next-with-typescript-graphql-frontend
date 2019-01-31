@@ -150,7 +150,7 @@ var Layout = function Layout(_ref) {
 /*!****************************************!*\
   !*** ./generated/apolloComponents.tsx ***!
   \****************************************/
-/*! exports provided: LoginDocument, LoginComponent, LoginHOC */
+/*! exports provided: LoginDocument, LoginComponent, LoginHOC, RegisterDocument, RegisterComponent, RegisterHOC */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -158,6 +158,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginDocument", function() { return LoginDocument; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginComponent", function() { return LoginComponent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginHOC", function() { return LoginHOC; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RegisterDocument", function() { return RegisterDocument; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RegisterComponent", function() { return RegisterComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RegisterHOC", function() { return RegisterHOC; });
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-apollo */ "./node_modules/react-apollo/react-apollo.browser.umd.js");
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
@@ -167,6 +170,16 @@ __webpack_require__.r(__webpack_exports__);
 var _jsxFileName = "/home/vikash/Desktop/Learning/next-with-typescript-graphql-example/generated/apolloComponents.tsx";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["\n  mutation Register($data: RegisterInput!) {\n    register(data: $data) {\n      id\n      firstName\n      lastName\n      email\n      name\n    }\n  }\n"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -228,7 +241,7 @@ function (_React$Component) {
       }, this["props"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 80
+          lineNumber: 104
         },
         __self: this
       }));
@@ -239,6 +252,38 @@ function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 function LoginHOC(operationOptions) {
   return react_apollo__WEBPACK_IMPORTED_MODULE_0__["graphql"](LoginDocument, operationOptions);
+}
+var RegisterDocument = graphql_tag__WEBPACK_IMPORTED_MODULE_2___default()(_templateObject2());
+var RegisterComponent =
+/*#__PURE__*/
+function (_React$Component2) {
+  _inherits(RegisterComponent, _React$Component2);
+
+  function RegisterComponent() {
+    _classCallCheck(this, RegisterComponent);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(RegisterComponent).apply(this, arguments));
+  }
+
+  _createClass(RegisterComponent, [{
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_1__["createElement"](react_apollo__WEBPACK_IMPORTED_MODULE_0__["Mutation"], _extends({
+        mutation: RegisterDocument
+      }, this["props"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 152
+        },
+        __self: this
+      }));
+    }
+  }]);
+
+  return RegisterComponent;
+}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
+function RegisterHOC(operationOptions) {
+  return react_apollo__WEBPACK_IMPORTED_MODULE_0__["graphql"](RegisterDocument, operationOptions);
 }
 
 /***/ }),
