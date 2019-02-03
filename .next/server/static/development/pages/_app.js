@@ -107,11 +107,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var apollo_boost__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_boost__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var apollo_link_context__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! apollo-link-context */ "apollo-link-context");
 /* harmony import */ var apollo_link_context__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(apollo_link_context__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! apollo-link-http */ "apollo-link-http");
-/* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(apollo_link_http__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! isomorphic-unfetch */ "isomorphic-unfetch");
-/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _isBrowser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./isBrowser */ "./lib/isBrowser.ts");
+/* harmony import */ var apollo_link_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! apollo-link-error */ "apollo-link-error");
+/* harmony import */ var apollo_link_error__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(apollo_link_error__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! apollo-link-http */ "apollo-link-http");
+/* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(apollo_link_http__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! isomorphic-unfetch */ "isomorphic-unfetch");
+/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! next/router */ "next/router");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _isBrowser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./isBrowser */ "./lib/isBrowser.ts");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -121,20 +125,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
+
 var apolloClient = null; // Polyfill fetch() on the server (used by apollo-client)
 
-if (!_isBrowser__WEBPACK_IMPORTED_MODULE_4__["isBrowser"]) {
-  global.fetch = isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_3___default.a;
+if (!_isBrowser__WEBPACK_IMPORTED_MODULE_6__["isBrowser"]) {
+  global.fetch = isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_4___default.a;
 }
 
 function create(initialState, _ref) {
   var getToken = _ref.getToken;
-  var httpLink = Object(apollo_link_http__WEBPACK_IMPORTED_MODULE_2__["createHttpLink"])({
+  var httpLink = Object(apollo_link_http__WEBPACK_IMPORTED_MODULE_3__["createHttpLink"])({
     uri: "http://localhost:4000/graphql",
     credentials: "include"
   });
-  var authLink = Object(apollo_link_context__WEBPACK_IMPORTED_MODULE_1__["setContext"])(function (_, _ref2) {
-    var headers = _ref2.headers;
+  var errorLink = Object(apollo_link_error__WEBPACK_IMPORTED_MODULE_2__["onError"])(function (_ref2) {
+    var graphQLErrors = _ref2.graphQLErrors,
+        networkError = _ref2.networkError;
+    if (graphQLErrors) graphQLErrors.map(function (_ref3) {
+      var message = _ref3.message,
+          locations = _ref3.locations,
+          path = _ref3.path;
+      console.log("[GraphQL error]: Message: ".concat(message, ", Location: ").concat(locations, ", Path: ").concat(path));
+
+      if (_isBrowser__WEBPACK_IMPORTED_MODULE_6__["isBrowser"] && message.includes("not authenticated")) {
+        debugger;
+        next_router__WEBPACK_IMPORTED_MODULE_5___default.a.replace("/login");
+      }
+    });
+    if (networkError) console.log("[Network error]: ".concat(networkError));
+  });
+  var authLink = Object(apollo_link_context__WEBPACK_IMPORTED_MODULE_1__["setContext"])(function (_, _ref4) {
+    var headers = _ref4.headers;
     var token = getToken();
     return {
       headers: _objectSpread({}, headers, {
@@ -144,10 +166,10 @@ function create(initialState, _ref) {
   }); // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
 
   return new apollo_boost__WEBPACK_IMPORTED_MODULE_0__["ApolloClient"]({
-    connectToDevTools: _isBrowser__WEBPACK_IMPORTED_MODULE_4__["isBrowser"],
-    ssrMode: !_isBrowser__WEBPACK_IMPORTED_MODULE_4__["isBrowser"],
+    connectToDevTools: _isBrowser__WEBPACK_IMPORTED_MODULE_6__["isBrowser"],
+    ssrMode: !_isBrowser__WEBPACK_IMPORTED_MODULE_6__["isBrowser"],
     // Disables forceFetch on the server (so queries are only run once)
-    link: authLink.concat(httpLink),
+    link: errorLink.concat(authLink.concat(httpLink)),
     cache: new apollo_boost__WEBPACK_IMPORTED_MODULE_0__["InMemoryCache"]().restore(initialState || {})
   });
 }
@@ -155,7 +177,7 @@ function create(initialState, _ref) {
 function initApollo(initialState, options) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
-  if (!_isBrowser__WEBPACK_IMPORTED_MODULE_4__["isBrowser"]) {
+  if (!_isBrowser__WEBPACK_IMPORTED_MODULE_6__["isBrowser"]) {
     return create(initialState, options);
   } // Reuse client on the client-side
 
@@ -183,6 +205,34 @@ var isBrowser = false;
 
 /***/ }),
 
+/***/ "./lib/redirect.ts":
+/*!*************************!*\
+  !*** ./lib/redirect.ts ***!
+  \*************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! next/router */ "next/router");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["default"] = (function (context, target) {
+  if (context.res) {
+    // server
+    // 303: "See other"
+    context.res.writeHead(303, {
+      Location: target
+    });
+    context.res.end();
+  } else {
+    // In the browser, we just pretend like this never even happened ;)
+    next_router__WEBPACK_IMPORTED_MODULE_0___default.a.replace(target);
+  }
+});
+
+/***/ }),
+
 /***/ "./lib/withApollo.tsx":
 /*!****************************!*\
   !*** ./lib/withApollo.tsx ***!
@@ -206,6 +256,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _initApollo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./initApollo */ "./lib/initApollo.ts");
 /* harmony import */ var _isBrowser__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./isBrowser */ "./lib/isBrowser.ts");
+/* harmony import */ var _redirect__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./redirect */ "./lib/redirect.ts");
 
 var _jsxFileName = "/home/vikash/Desktop/Learning/next-with-typescript-graphql-example/lib/withApollo.tsx";
 
@@ -236,6 +287,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -300,7 +352,7 @@ function parseCookies(req) {
 
                 case 10:
                   if (_isBrowser__WEBPACK_IMPORTED_MODULE_7__["isBrowser"]) {
-                    _context.next = 20;
+                    _context.next = 21;
                     break;
                   }
 
@@ -312,13 +364,13 @@ function parseCookies(req) {
                     apolloClient: apollo,
                     __source: {
                       fileName: _jsxFileName,
-                      lineNumber: 56
+                      lineNumber: 57
                     },
                     __self: this
                   })));
 
                 case 14:
-                  _context.next = 19;
+                  _context.next = 20;
                   break;
 
                 case 16:
@@ -329,19 +381,24 @@ function parseCookies(req) {
                   // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
                   console.error("Error while running `getDataFromTree`", _context.t0);
 
-                case 19:
+                  if (_context.t0.message.includes("not authenticated")) {
+                    debugger;
+                    Object(_redirect__WEBPACK_IMPORTED_MODULE_8__["default"])(ctx.ctx, "/login");
+                  }
+
+                case 20:
                   // getDataFromTree does not call componentWillUnmount
                   // head side effect therefore need to be cleared manually
                   next_head__WEBPACK_IMPORTED_MODULE_2___default.a.rewind();
 
-                case 20:
+                case 21:
                   // Extract query data from the Apollo's store
                   apolloState = apollo.cache.extract();
                   return _context.abrupt("return", _objectSpread({}, appProps, {
                     apolloState: apolloState
                   }));
 
-                case 22:
+                case 23:
                 case "end":
                   return _context.stop();
               }
@@ -380,7 +437,7 @@ function parseCookies(req) {
           apolloClient: this.apolloClient,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 98
+            lineNumber: 103
           },
           __self: this
         }));
@@ -531,6 +588,17 @@ module.exports = require("apollo-link-context");
 
 /***/ }),
 
+/***/ "apollo-link-error":
+/*!************************************!*\
+  !*** external "apollo-link-error" ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("apollo-link-error");
+
+/***/ }),
+
 /***/ "apollo-link-http":
 /*!***********************************!*\
   !*** external "apollo-link-http" ***!
@@ -583,6 +651,17 @@ module.exports = require("next/app");
 /***/ (function(module, exports) {
 
 module.exports = require("next/head");
+
+/***/ }),
+
+/***/ "next/router":
+/*!******************************!*\
+  !*** external "next/router" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next/router");
 
 /***/ }),
 
