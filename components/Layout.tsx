@@ -1,4 +1,3 @@
-
 import Head from "next/head";
 import Link from "next/link";
 import * as React from "react";
@@ -29,6 +28,10 @@ const Layout: React.FunctionComponent<Props> = ({
         |{" "}
         <Link href="/register">
           <a>register</a>
+        </Link>{" "}
+        |{" "}
+        <Link href="/forgot-password">
+          <a>forgot password</a>
         </Link>{" "}
         |{" "}
         <Link href="/login">
