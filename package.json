@@ -12,7 +12,7 @@
     "@types/cookie": "^0.3.2",
     "@types/styled-components": "^4.1.8",
     "@zeit/next-typescript": "^1.1.1",
-    "apollo-boost": "^0.1.27",
+    "apollo-boost": "^0.4.0",
     "apollo-link-context": "^1.0.12",
     "apollo-link-error": "^1.1.7",
     "apollo-link-http": "^1.5.9",
