@@ -9,7 +9,7 @@
     "generate": "gql-gen --config codegen.yml"
   },
   "dependencies": {
-    "@types/cookie": "^0.3.2",
+    "@types/cookie": "^0.3.3",
     "@types/styled-components": "^4.1.8",
     "@zeit/next-typescript": "^1.1.1",
     "apollo-boost": "^0.4.0",
