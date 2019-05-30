@@ -36,7 +36,7 @@
     "graphql-codegen-typescript-common": "0.18.2",
     "graphql-codegen-typescript-react-apollo": "0.18.2",
     "ts-node": "^8.2.0",
-    "ts-node-dev": "^1.0.0-pre.32",
+    "ts-node-dev": "^1.0.0-pre.39",
     "typescript": "3.4.5"
   },
   "license": "ISC"
