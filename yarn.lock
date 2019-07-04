@@ -822,9 +822,9 @@
     "@types/prop-types" "*"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.4.16":
-  version "16.7.22"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.22.tgz#5bc6d166d5ac34b835756f0b736c7b1af0043e81"
+"@types/react@*", "@types/react@^16.8.23":
+  version "16.8.23"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.23.tgz#ec6be3ceed6353a20948169b6cb4c97b65b97ad2"
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -1330,6 +1330,10 @@ assign-symbols@^1.0.0:
 async-each@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.3.tgz#b727dbf87d7651602f06f4d4ac387f47d91b0cbf"
+
+async-sema@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/async-sema/-/async-sema-2.2.0.tgz#b0de2bb11a2560d369aca975d24650cc05304979"
 
 async@^2.6.1:
   version "2.6.2"
